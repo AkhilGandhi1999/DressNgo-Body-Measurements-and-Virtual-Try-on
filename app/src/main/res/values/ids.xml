@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="editTextWeight" type="id" />
+    <item name="btnCreateProfile" type="id" />
+    <item name="editTextName" type="id" />
+    <item name="textView" type="id" />
+    <item name="editTextHeight" type="id" />
+    <item name="textViewAlready" type="id" />
+    <item name="radioGroup3" type="id" />
+</resources>
