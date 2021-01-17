@@ -68,7 +68,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextHeight" />
 
     <RadioGroup
-        android:id="@+id/radioGroup3"
+        android:id="@+id/radioGroup"
         android:layout_width="262dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -80,6 +80,7 @@
         tools:ignore="MissingConstraints">
 
         <RadioButton
+            android:id="@+id/radMale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Male"
@@ -87,6 +88,7 @@
             android:textSize="21sp" />
 
         <RadioButton
+            android:id="@+id/radFemale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="82dp"
@@ -97,17 +99,18 @@
 
 
     <Button
-        android:id="@+id/btnUser"
+        android:id="@+id/btnCreateUser"
         android:layout_width="160dp"
         android:layout_height="52dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="38dp"
         android:text="Create Profile"
         android:textColor="#FFFFFF"
         app:backgroundTint="#002D9F"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup3"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
         app:layout_constraintVertical_bias="0.0" />
 
 

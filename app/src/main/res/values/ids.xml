@@ -6,5 +6,6 @@
     <item name="textView" type="id" />
     <item name="editTextHeight" type="id" />
     <item name="textViewAlready" type="id" />
-    <item name="radioGroup3" type="id" />
+    <item name="radioGroup" type="id" />
+    <item name="image2" type="id" />
 </resources>
