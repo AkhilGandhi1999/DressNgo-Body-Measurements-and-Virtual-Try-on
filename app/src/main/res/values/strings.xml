@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BodyMeasurements_VTON</string>
+    <string name="toast_message">Done</string>
 </resources>

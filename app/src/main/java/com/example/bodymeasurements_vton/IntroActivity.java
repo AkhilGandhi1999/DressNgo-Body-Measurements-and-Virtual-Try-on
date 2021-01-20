@@ -69,9 +69,9 @@ public class IntroActivity extends AppCompatActivity {
         // fill list screen
 
         final List<ScreenItem> mList = new ArrayList<>();
-        mList.add(new ScreenItem("Welcome!!","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit",R.drawable.shopping));
-        mList.add(new ScreenItem("Body Measurements","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit",R.drawable.check4));
-        mList.add(new ScreenItem("Virtual Try-On","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, consectetur  consectetur adipiscing elit",R.drawable.tailor));
+        mList.add(new ScreenItem("Hello!","Welcome to Virtual Dressing Room!",R.drawable.shopping));
+        mList.add(new ScreenItem("Get Body Measurements","A one stop solution to help you find your perfect size.",R.drawable.check4));
+        mList.add(new ScreenItem("Virtual Try-On","A real life experience to your personalized try-on dressing room.",R.drawable.tailor));
 
         // setup viewpager
         screenPager =findViewById(R.id.screen_viewpager);
