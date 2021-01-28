@@ -432,8 +432,6 @@ public class Camera extends AppCompatActivity implements SensorEventListener {
         stopBackgroundThread();
         super.onPause();
         sensorManager.unregisterListener(this);
-
-
     }
 
 }
