@@ -22,7 +22,7 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,7 +32,7 @@
 
         <ImageView
             android:id="@+id/image1"
-            android:layout_width="380dp"
+            android:layout_width="match_parent"
             android:layout_height="230dp"
             android:background="@drawable/dialog1" />
 
@@ -71,7 +71,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="90dp"
@@ -83,7 +83,7 @@
 
         <ImageView
             android:id="@id/image2"
-            android:layout_width="380dp"
+            android:layout_width="match_parent"
             android:layout_height="230dp"
             android:background="@drawable/dialog1" />
 

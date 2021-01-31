@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-fashionai-dev-175628-authRole",
+      "UnauthRoleArn": "arn:aws:iam::877157050453:role/amplify-fashionai-dev-175628-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::877157050453:role/amplify-fashionai-dev-175628-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-fashionai-dev-175628-deployment",
+      "UnauthRoleName": "amplify-fashionai-dev-175628-unauthRole",
+      "StackName": "amplify-fashionai-dev-175628",
+      "StackId": "arn:aws:cloudformation:ap-south-1:877157050453:stack/amplify-fashionai-dev-175628/470d33b0-622d-11eb-b4eb-02c8952955f8",
+      "AmplifyAppId": "d3l9e05hh2ccwe"
+    }
+  }
+}

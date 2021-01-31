@@ -5,16 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorStatusBar"
+    android:background="#000"
     android:alpha="0.85"
     tools:context=".Camera">
     <FrameLayout
+        android:id="@+id/frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/lllll"
         android:layout_alignParentTop="true">
         <TextureView
             android:id="@+id/texture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+        <ImageView
+            android:id="@+id/preview"
+            android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
@@ -61,21 +68,57 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="55dp"
-        android:layout_marginBottom="40dp"
-        android:background="@drawable/round_button"
-        android:padding="10dp">
+        android:orientation="horizontal"
+        android:layout_marginTop="70dp"
+        android:layout_marginBottom="70dp"
+        >
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/floatingActionButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            app:backgroundTint="#e31e31"
+            app:srcCompat="@drawable/ic_round_replay_24"
+            app:tint="#ffffff"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="CLICK ME"
+            android:visibility="invisible"
+            />
+        <LinearLayout
+            android:id="@+id/take"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_button"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="40dp"
+            android:padding="10dp">
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/floatingActionButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                app:backgroundTint="#fff"
+                android:background="@drawable/round_button"
+
+                android:text="CLICK ME"
+                android:focusable="true"
+                tools:ignore="ContentDescription" />
+        </LinearLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
-            app:backgroundTint="#fff"
-            android:background="@drawable/round_button"
-            android:layout_centerHorizontal="true"
-            android:text="CLICK ME"
+            app:backgroundTint="#1fdb25"
+            app:srcCompat="@drawable/ic_baseline_check_24"
+            app:tint="#ffffff"
+            android:text="@string/click_me"
+            android:visibility="invisible"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="0dp"
             android:focusable="true"
-            tools:ignore="ContentDescription" />
+            />
     </LinearLayout>
-
 </RelativeLayout>
