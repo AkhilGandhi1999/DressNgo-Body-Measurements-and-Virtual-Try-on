@@ -19,6 +19,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,9 +41,13 @@ public class MainActivity extends AppCompatActivity {
 
         init();
         mAuth = FirebaseAuth.getInstance();
-        if(mAuth.getCurrentUser() != null)
-        {
-            login();
+        Bundle extras = getIntent().getExtras();
+        if(extras == null){
+          //  Toast.makeText(this,"Null ",Toast.LENGTH_LONG).show();
+            if(mAuth.getCurrentUser() != null)
+            {
+                login();
+            }
         }
         txt1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,9 +94,32 @@ public class MainActivity extends AppCompatActivity {
 
                     if (task.isSuccessful()) {
                         //redirect
-                        Toast.makeText(MainActivity.this, "Logged In", Toast.LENGTH_LONG).show();
-                        progressBar.setVisibility(View.GONE);
-                        login();
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+                        reference.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for(DataSnapshot datas: dataSnapshot.getChildren()){
+                                    String flag = datas.child("flag").getValue().toString();
+                                    if(flag.equals("0")){
+                                        datas.getRef().child("flag").setValue(1);
+                                        Toast.makeText(MainActivity.this, "Inside flag", Toast.LENGTH_LONG).show();
+                                        Intent intent = new Intent(MainActivity.this, CreateProfile.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                    else {
+                                        progressBar.setVisibility(View.GONE);
+                                        login();
+
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+
+                        //Toast.makeText(MainActivity.this, "Logged In", Toast.LENGTH_LONG).show();
 
                     } else {
                         Toast.makeText(MainActivity.this, "Failed to login", Toast.LENGTH_LONG).show();

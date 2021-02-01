@@ -72,7 +72,7 @@ public class Register extends AppCompatActivity {
             this.mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 public void onComplete(Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                            User user = new User(email);
+                            User user = new User(email, 0);
 
                             FirebaseDatabase.getInstance().getReference("Users")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -83,7 +83,9 @@ public class Register extends AppCompatActivity {
                                     if(task.isSuccessful()){
                                         Toast.makeText(Register.this, "User has been created successfully", Toast.LENGTH_LONG).show();
                                         progressBar.setVisibility(View.GONE);
+                                        String working = "working";
                                         Intent intent = new Intent(Register.this,MainActivity.class);
+                                        intent.putExtra("working",working);
                                         startActivity(intent);
                                         finish();
                                     }

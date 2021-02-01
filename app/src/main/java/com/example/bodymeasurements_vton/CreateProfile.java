@@ -33,6 +33,7 @@ public class CreateProfile extends AppCompatActivity {
     void User(){
         Intent intent = new Intent(this, MainScreen.class);
         startActivity(intent);
+        finish();
     }
 
     void init(){
