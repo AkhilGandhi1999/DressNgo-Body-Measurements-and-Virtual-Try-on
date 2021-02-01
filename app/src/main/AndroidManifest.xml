@@ -15,7 +15,18 @@
         <activity android:name=".Camera"
             android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".EditProfile"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".ContactUs"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".Walkthrough"
+            android:screenOrientation="portrait">
+        </activity>
         <activity android:name=".MainScreen"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ChangePassword"
             android:screenOrientation="portrait"/>
         <activity android:name=".CreateProfile"
             android:screenOrientation="portrait"/>

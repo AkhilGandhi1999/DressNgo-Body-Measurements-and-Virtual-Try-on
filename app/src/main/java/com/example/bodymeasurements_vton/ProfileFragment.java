@@ -30,9 +30,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
 
-
-
-
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
         TextView txt1 = (TextView) rootView.findViewById(R.id.textContactUs);
@@ -58,29 +55,19 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         return rootView;
     }
 
-
-
     @Override
     public void onClick(View view) {
         Fragment fragment = null;
         switch (view.getId()) {
             case R.id.textContactUs:
-                fragment = new ContactUs();
-                replaceFragment(fragment);
+                Intent contact_intent = new Intent(getActivity(),ContactUs.class);
+                startActivity(contact_intent);
                 break;
 
             case R.id.textEditProfile:
-                fragment = new EditProfile();
-                replaceFragment(fragment);
+                Intent profile_intent = new Intent(getActivity(),EditProfile.class);
+                startActivity(profile_intent);
                 break;
         }
     }
-
-    public void replaceFragment(Fragment someFragment) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, someFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
 }

@@ -54,20 +54,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode)
-        {
-            case 1:
-                if(resultCode== Activity.RESULT_OK)
-                {
-                    Toast.makeText(MainActivity.this, "You Can Now Login", Toast.LENGTH_LONG).show();
-                }
-                break;
-        }
-    }
-
     void register(){
         Intent intent = new Intent(this,Register.class);
         startActivity(intent);

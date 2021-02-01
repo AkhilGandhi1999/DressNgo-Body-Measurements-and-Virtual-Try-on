@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".EditProfile">
 
     <TextView
         android:layout_width="wrap_content"
@@ -43,6 +44,7 @@
         android:layout_height="46dp"
         android:background="@drawable/dialog"
         android:ems="10"
+        android:inputType="number"
         android:layout_marginTop="50dp"
         android:layout_gravity="center_horizontal"
         app:layout_constraintHorizontal_bias="0.497"
@@ -53,6 +55,7 @@
         android:layout_height="46dp"
         android:background="@drawable/dialog"
         android:ems="10"
+        android:inputType="number"
         android:layout_marginTop="50dp"
         android:layout_gravity="center_horizontal"
         app:layout_constraintHorizontal_bias="0.497"

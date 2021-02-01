@@ -83,8 +83,8 @@ public class Register extends AppCompatActivity {
                                     if(task.isSuccessful()){
                                         Toast.makeText(Register.this, "User has been created successfully", Toast.LENGTH_LONG).show();
                                         progressBar.setVisibility(View.GONE);
-                                        Intent intent = new Intent();
-                                        setResult(Activity.RESULT_OK,intent);
+                                        Intent intent = new Intent(Register.this,MainActivity.class);
+                                        startActivity(intent);
                                         finish();
                                     }
                                     else{
