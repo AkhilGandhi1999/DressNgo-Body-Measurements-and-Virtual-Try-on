@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -605,6 +606,10 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                 restResponse -> Log.i("MyAmplifyApp", "POST succeeded: " + restResponse.getCode()),
                 apiFailure -> Log.e("MyAmplifyApp", "POST failed.", apiFailure)
         );
+//        Fragment fragment = new MeasurementsFragment();
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.fragmentContainer, fragment).commit();
+
     }
     // Compute the three orientation angles based on the most recent readings from
     // the device's accelerometer and magnetometer.

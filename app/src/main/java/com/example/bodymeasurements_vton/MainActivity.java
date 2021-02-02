@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                                         datas.getRef().child("flag").setValue(1);
                                         Toast.makeText(MainActivity.this, "Inside flag", Toast.LENGTH_LONG).show();
                                         Intent intent = new Intent(MainActivity.this, CreateProfile.class);
+                                        intent.putExtra("email",email);
                                         startActivity(intent);
                                         finish();
                                     }
