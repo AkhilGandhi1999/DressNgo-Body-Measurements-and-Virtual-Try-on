@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                         //Toast.makeText(MainActivity.this, "Logged In", Toast.LENGTH_LONG).show();
 
                     } else {
-                        Toast.makeText(MainActivity.this, "Failed to login", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "Failed to login, check entered details", Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(View.GONE);
 
                     }

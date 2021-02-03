@@ -14,16 +14,19 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import static android.content.ContentValues.TAG;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
 
-
-
-
     private TextView txt3;
-
+    private TextView t1, t2, t3, t4;
 
     @Nullable
     @Override
@@ -37,6 +40,34 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         TextView txt2 = (TextView) rootView.findViewById(R.id.textEditProfile);
 
         txt3 = (TextView) rootView.findViewById(R.id.textLogout);
+
+        init(rootView);
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference mDb = mDatabase.getReference();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        String userKey = user.getUid();
+
+
+        mDb.child("Users").child(userKey).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String gender = dataSnapshot.child("gender").getValue().toString();
+                String email = dataSnapshot.child("email").getValue().toString();
+                String height = dataSnapshot.child("height").getValue().toString();
+                String weight = dataSnapshot.child("weight").getValue().toString();
+                height.concat("cm");
+                weight.concat("kg");
+                t1.setText(email);
+                t2.setText(height);
+                t3.setText(weight);
+                t4.setText(gender);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
 
 
         txt1.setOnClickListener(this);
@@ -65,9 +96,17 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.textEditProfile:
+                Toast.makeText(getActivity(),"Work in progress",Toast.LENGTH_LONG).show();
                 Intent profile_intent = new Intent(getActivity(),EditProfile.class);
                 startActivity(profile_intent);
                 break;
         }
+    }
+
+    void init(View v){
+        t1 = (TextView) v.findViewById(R.id.t1);
+        t2 = (TextView) v.findViewById(R.id.t2);
+        t3 = (TextView) v.findViewById(R.id.t3);
+        t4 = (TextView) v.findViewById(R.id.t4);
     }
 }

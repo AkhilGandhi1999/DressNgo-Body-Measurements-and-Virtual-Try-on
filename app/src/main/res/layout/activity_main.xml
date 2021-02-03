@@ -51,7 +51,7 @@
         android:gravity="center"
         android:text="Not a member? Register"
         android:textColor="#002D9F"
-        android:textSize="16sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"

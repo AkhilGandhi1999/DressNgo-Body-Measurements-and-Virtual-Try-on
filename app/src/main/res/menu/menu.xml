@@ -5,7 +5,7 @@
         android:title="Home">
     </item>
     <item android:id="@+id/measurements"
-        android:icon="@drawable/ic_baseline_insert_photo_24"
+        android:icon="@drawable/ic_measurings_1"
         android:title="My Measurements">
     </item>
     <item android:id="@+id/profile"

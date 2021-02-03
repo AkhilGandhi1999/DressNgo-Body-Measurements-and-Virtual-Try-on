@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,6 +22,8 @@ public class CreateProfile extends AppCompatActivity {
 
     private Button btn1;
     private EditText ed1, ed2, ed3;
+    private RadioGroup radioGroup;
+    private RadioButton radioButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,13 @@ public class CreateProfile extends AppCompatActivity {
         String name = ed1.getText().toString();
         int weight = Integer.parseInt(ed2.getText().toString());
         int height = Integer.parseInt(ed3.getText().toString());
+        int selectedId = radioGroup.getCheckedRadioButtonId();
+
+        // find the radiobutton by returned id
+        radioButton = (RadioButton) findViewById(selectedId);
+
+        String gender = radioButton.getText().toString();
+
         Bundle extras = getIntent().getExtras();
         String email = extras.getString("email");
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
@@ -53,7 +64,7 @@ public class CreateProfile extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot datas: snapshot.getChildren()) {
                     datas.getRef().child("name").setValue(name);
-                    datas.getRef().child("gender").setValue("Male");
+                    datas.getRef().child("gender").setValue(gender);
                     datas.getRef().child("height").setValue(height);
                     datas.getRef().child("weight").setValue(weight);
                     Intent intent = new Intent(CreateProfile.this, MainScreen.class);
@@ -74,5 +85,6 @@ public class CreateProfile extends AppCompatActivity {
         ed1 = (EditText) findViewById(R.id.editTextName);
         ed2 = (EditText) findViewById(R.id.editTextHeight);
         ed3 = (EditText) findViewById(R.id.editTextWeight);
+        radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
     }
 }

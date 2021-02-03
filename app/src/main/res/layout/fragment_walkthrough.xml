@@ -28,7 +28,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2">
         <VideoView
             android:id="@+id/videoview"
-            android:layout_width="wrap_content"
+            android:layout_width="380dp"
             android:layout_height="wrap_content"
             app:layout_constraintDimensionRatio="16:9"
             app:layout_constraintEnd_toEndOf="parent"

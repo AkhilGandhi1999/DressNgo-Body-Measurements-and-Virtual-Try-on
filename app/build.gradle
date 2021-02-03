@@ -53,4 +53,6 @@ dependencies {
     implementation 'com.amplifyframework:aws-api:1.6.4'
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
+
+    implementation 'com.github.happyfresh:ShowCaseView:1.1'
 }

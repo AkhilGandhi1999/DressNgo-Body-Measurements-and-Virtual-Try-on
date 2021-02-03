@@ -36,6 +36,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/dialog1" />
 
+
         <ImageView
             android:id="@+id/email"
             android:layout_width="wrap_content"
@@ -44,6 +45,15 @@
             android:layout_marginLeft="50dp"
             android:layout_marginTop="35dp"
             android:background="@drawable/email" />
+
+        <TextView
+            android:id="@+id/t1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginLeft="150dp"
+            android:layout_marginTop="35dp"
+            />
 
         <ImageView
             android:id="@+id/height"
@@ -54,6 +64,16 @@
             android:layout_marginTop="87dp"
             android:background="@drawable/height" />
 
+        <TextView
+            android:id="@+id/t2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginLeft="150dp"
+            android:layout_marginTop="87dp"
+            />
+
+
         <ImageView
             android:id="@+id/weight"
             android:layout_width="wrap_content"
@@ -63,6 +83,15 @@
             android:layout_marginTop="143dp"
             android:background="@drawable/weight" />
 
+        <TextView
+            android:id="@+id/t3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginLeft="150dp"
+            android:layout_marginTop="143dp"
+            />
+
         <ImageView
             android:id="@+id/gender"
             android:layout_width="wrap_content"
@@ -71,6 +100,15 @@
             android:layout_marginLeft="50dp"
             android:layout_marginTop="193dp"
             android:background="@drawable/gender" />
+
+        <TextView
+            android:id="@+id/t4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginLeft="150dp"
+            android:layout_marginTop="193dp"
+            />
 
     </RelativeLayout>
 
