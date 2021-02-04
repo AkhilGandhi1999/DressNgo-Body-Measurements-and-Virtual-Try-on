@@ -90,7 +90,7 @@ public class Register extends AppCompatActivity {
                                         finish();
                                     }
                                     else{
-                                        Toast.makeText(Register.this, "Failed to create the user", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(Register.this, "Failed, user already exits", Toast.LENGTH_LONG).show();
                                         progressBar.setVisibility(View.GONE);
 
                                     }
@@ -98,7 +98,7 @@ public class Register extends AppCompatActivity {
                             });
 
                     }else{
-                        Toast.makeText(Register.this, "Failed to create the user", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Register.this, "Failed, user already exits", Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(View.GONE);
 
                     }
