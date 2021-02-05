@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.MediaController;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
 
@@ -64,12 +66,18 @@ public class Walkthrough extends AppCompatActivity {
         setContentView(R.layout.fragment_walkthrough);
 
         init();
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            Toast.makeText(this,"Start again, Error in the images uploaded",Toast.LENGTH_LONG).show();
+
+        }
 
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Walkthrough.this,Camera.class);
                 startActivity(intent);
+                finish();
             }
         });
 

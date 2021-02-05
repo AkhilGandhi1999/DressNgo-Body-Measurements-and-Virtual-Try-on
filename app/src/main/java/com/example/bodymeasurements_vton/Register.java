@@ -24,7 +24,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Register extends AppCompatActivity {
 
-
     private Button btn1;
     private EditText ed1, ed2, ed3;
     private TextView txt2;

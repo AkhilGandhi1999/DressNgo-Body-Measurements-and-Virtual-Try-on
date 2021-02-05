@@ -62,6 +62,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -70,9 +71,16 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.happyfresh.showcase.GuideView;
 import com.happyfresh.showcase.config.AlignType;
 import com.happyfresh.showcase.listener.GuideListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainScreen extends AppCompatActivity {
 
@@ -84,7 +92,8 @@ public class MainScreen extends AppCompatActivity {
     private GuideView.Builder builder4;
     public  Activity myActivity;
 
-
+    JSONObject jsonObject;
+    private Double[] data = new Double[11];
     HomeFragment defaultFragment = new HomeFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +105,24 @@ public class MainScreen extends AppCompatActivity {
         setContentView(R.layout.activity_main_screen);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, defaultFragment).commit();
+        Bundle extras = getIntent().getExtras();
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference mDb = mDatabase.getReference();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        String userKey = user.getUid();
+
+        if(extras != null){
+
+            Fragment fragment  = new MeasurementsFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
+
+        }
+        else{
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, defaultFragment).commit();
+
+        }
 
         BottomNavigationItemView myButton1 = findViewById(R.id.home);
         //Log.d(TAG, "Success")

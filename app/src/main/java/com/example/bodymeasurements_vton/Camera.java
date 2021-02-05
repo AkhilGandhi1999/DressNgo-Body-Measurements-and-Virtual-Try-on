@@ -5,8 +5,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -16,7 +16,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.ExifInterface;
 import android.media.MediaActionSound;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.Manifest;
@@ -44,36 +43,39 @@ import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.amplifyframework.api.rest.RestOptions;
+import com.amplifyframework.api.rest.RestResponse;
 import com.amplifyframework.core.Amplify;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.io.ByteArrayOutputStream;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Camera extends AppCompatActivity implements SensorEventListener{
     private static final String TAG = "AndroidCameraApi";
@@ -110,6 +112,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
     private String filename;
     public String fname;
     private int currentSensor;
+    private ProgressBar p;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,6 +124,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
         } else {
             Toast.makeText(Camera.this,"Gyroscope Sensor not available",Toast.LENGTH_LONG).show();
         }
+        p = (ProgressBar) findViewById(R.id.progressBar2);
         textureView = (TextureView) findViewById(R.id.texture);
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
@@ -148,7 +152,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                     fw.setVisibility(View.INVISIBLE);
                     f.setVisibility(View.INVISIBLE);
                     fname=new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString(), filename+ ".jpeg").getAbsolutePath();
-                    Toast.makeText(Camera.this,fname,Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(Camera.this,fname,Toast.LENGTH_LONG).show();
                     Bitmap img = BitmapFactory.decodeFile(fname);
                     ExifInterface ei = null;
                     try {
@@ -209,7 +213,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                     File file2 = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString(), "RIGHT.jpeg");
 
                     server_call(file1, file2);
-                    Toast.makeText(Camera.this,"lets move ahead",Toast.LENGTH_LONG).show();
+                   // Toast.makeText(Camera.this,"lets move ahead",Toast.LENGTH_LONG).show();
                 }
                 else
                 {
@@ -350,7 +354,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
         @Override
         public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
             super.onCaptureCompleted(session, request, result);
-            Toast.makeText(Camera.this, "Saved:" + file, Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(Camera.this, "Saved:" + file, Toast.LENGTH_SHORT).show();
             createCameraPreview();
         }
     };
@@ -446,7 +450,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
-                    Toast.makeText(Camera.this, "Saved:" + file, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(Camera.this, "Saved:" + file, Toast.LENGTH_SHORT).show();
                     createCameraPreview();
                 }
             };
@@ -571,6 +575,8 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
     @RequiresApi(api = Build.VERSION_CODES.O)
     void server_call(File file1, File file2) {
 
+
+        p.setVisibility(View.VISIBLE);
         String b64_1 = "",b64_2 = "";
         try{
             FileInputStream fileInputStreamReader1 = new FileInputStream(file1);
@@ -593,24 +599,112 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
         catch(IOException e){
             System.out.println(e);
         }
-        //
 
-        String jsonRequestString = "{\"height\" : 177 , \"front_image\" : \"%s\", \"right_image\" : \"%s\"}";
-        String result = String.format(jsonRequestString, b64_1,b64_2);
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference mDb = mDatabase.getReference();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        String userKey = user.getUid();
+
+        String finalB64_ = b64_1;
+        String finalB64_1 = b64_2;
+        final String[] height = new String[1];
+        mDb.child("Users").child(userKey).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+
+        String jsonRequestString = "{\"height\" : 169  , \"front_image\" : \"%s\", \"right_image\" : \"%s\"}";
+        String result = String.format(jsonRequestString,  finalB64_, finalB64_1);
         RestOptions options = RestOptions.builder()
                 .addPath("/fashionm")
                 .addBody(result.getBytes())
                 .build();
-        //Log.i("Check the path ",options.getPath());
+
         Amplify.API.post(options,
-                restResponse -> Log.i("MyAmplifyApp", "POST succeeded: " + restResponse.getCode()),
-                apiFailure -> Log.e("MyAmplifyApp", "POST failed.", apiFailure)
+                restResponse -> {
+                    try {
+                        Log.i("MyAmplifyApp", "POST succeeded: " + restResponse.getData().asJSONObject());
+                        check(restResponse.getData(), restResponse.getCode());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                apiFailure -> {
+                    Log.e("MyAmplifyApp", "POST failed.", apiFailure);
+                }
         );
-//        Fragment fragment = new MeasurementsFragment();
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.fragmentContainer, fragment).commit();
+    }
+
+    void check(RestResponse.Data data, RestResponse.Code code) throws JSONException {
+
+        JSONObject jsonObject = data.asJSONObject();
+
+        if(code.isSuccessful()){
+            if(jsonObject.has("Error")){
+                Log.i("MyAmplifyApp", "POST succeeded: " + jsonObject.get("Error"));
+                Intent intent = new Intent(Camera.this,Walkthrough.class);
+                String again = "Error in the images uploaded start again";
+                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("again",again);
+                startActivity(intent);
+            }
+            else{
+                Log.i("MyAmplifyApp", "POST succeeded: " + jsonObject);
+
+                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+                DatabaseReference mDb = mDatabase.getReference();
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                String userKey = user.getUid();
+
+                mDb.child("Users").child(userKey).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        try {
+                            dataSnapshot.getRef().child("shoulder").setValue(jsonObject.get("Shoulder"));
+                            dataSnapshot.getRef().child("right_hand").setValue(jsonObject.get("Right_hand"));
+                            dataSnapshot.getRef().child("left_hand").setValue(jsonObject.get("Left_hand"));
+                            dataSnapshot.getRef().child("right_leg").setValue(jsonObject.get("Right_leg"));
+                            dataSnapshot.getRef().child("left_leg").setValue(jsonObject.get("Left_leg"));
+                            dataSnapshot.getRef().child("hip").setValue(jsonObject.get("Hip"));
+                            dataSnapshot.getRef().child("waist").setValue(jsonObject.get("Waist"));
+                            dataSnapshot.getRef().child("chest_girth").setValue(jsonObject.get("Chest Girth"));
+                            dataSnapshot.getRef().child("thigh_girth").setValue( jsonObject.get("Thigh Girth"));
+                            dataSnapshot.getRef().child("ankle_regular").setValue(jsonObject.get("Ankle Regular"));
+                            dataSnapshot.getRef().child("ankle_tight").setValue( jsonObject.get("Ankle Tight"));
+                            String measure = "measure";
+                            Intent intent = new Intent(Camera.this,MainScreen.class);
+                            intent.putExtra("measure",measure);
+                          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
+
+            }
+            finish();
+
+        }
+//        else if(code.isServiceFailure()){
+//
+//        }
+//        else  if(code.isClientError()){
+//
+//        }
 
     }
+
     // Compute the three orientation angles based on the most recent readings from
     // the device's accelerometer and magnetometer.
 }

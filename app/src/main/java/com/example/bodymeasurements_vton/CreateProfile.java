@@ -83,8 +83,8 @@ public class CreateProfile extends AppCompatActivity {
     void init(){
         btn1 = (Button) findViewById(R.id.btnCreateUser);
         ed1 = (EditText) findViewById(R.id.editTextName);
-        ed2 = (EditText) findViewById(R.id.editTextHeight);
-        ed3 = (EditText) findViewById(R.id.editTextWeight);
+        ed2 = (EditText) findViewById(R.id.editTextWeight);
+        ed3 = (EditText) findViewById(R.id.editTextHeight);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
     }
 }

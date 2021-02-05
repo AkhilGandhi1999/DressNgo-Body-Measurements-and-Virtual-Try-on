@@ -50,10 +50,10 @@
             android:id="@+id/t1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
             android:textColor="@color/colorPrimaryDark"
             android:layout_marginLeft="150dp"
-            android:layout_marginTop="35dp"
-            />
+            android:layout_marginTop="43dp" />
 
         <ImageView
             android:id="@+id/height"
@@ -69,9 +69,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
             android:layout_marginLeft="150dp"
-            android:layout_marginTop="87dp"
-            />
+            android:layout_marginTop="95dp" />
 
 
         <ImageView
@@ -87,10 +87,10 @@
             android:id="@+id/t3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
             android:textColor="@color/colorPrimaryDark"
             android:layout_marginLeft="150dp"
-            android:layout_marginTop="143dp"
-            />
+            android:layout_marginTop="151dp" />
 
         <ImageView
             android:id="@+id/gender"
@@ -106,9 +106,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
             android:layout_marginLeft="150dp"
-            android:layout_marginTop="193dp"
-            />
+            android:layout_marginTop="201dp" />
 
     </RelativeLayout>
 
