@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -73,6 +74,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
@@ -85,6 +87,8 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
     private FloatingActionButton saveButton;
     public SimpleDateFormat mDateFormat;
     private TextureView textureView;
+    private DatabaseReference databaseReference;
+    private FirebaseAuth firebaseAuth;
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -125,6 +129,8 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
             Toast.makeText(Camera.this,"Gyroscope Sensor not available",Toast.LENGTH_LONG).show();
         }
         p = (ProgressBar) findViewById(R.id.progressBar2);
+        firebaseAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
         textureView = (TextureView) findViewById(R.id.texture);
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
@@ -600,26 +606,10 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
             System.out.println(e);
         }
 
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference mDb = mDatabase.getReference();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        String userKey = user.getUid();
-
-        String finalB64_ = b64_1;
-        String finalB64_1 = b64_2;
-        final String[] height = new String[1];
-        mDb.child("Users").child(userKey).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
-
-        String jsonRequestString = "{\"height\" : 169  , \"front_image\" : \"%s\", \"right_image\" : \"%s\"}";
-        String result = String.format(jsonRequestString,  finalB64_, finalB64_1);
+        SharedPreferences sh = getSharedPreferences("User_Measurements", MODE_PRIVATE);
+        String height = String.valueOf(sh.getInt("height",0));
+        String jsonRequestString = "{\"height\" : \"%s\"  , \"front_image\" : \"%s\", \"right_image\" : \"%s\"}";
+        String result = String.format(jsonRequestString, height, b64_1, b64_2);
         RestOptions options = RestOptions.builder()
                 .addPath("/fashionm")
                 .addBody(result.getBytes())
@@ -628,7 +618,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
         Amplify.API.post(options,
                 restResponse -> {
                     try {
-                        Log.i("MyAmplifyApp", "POST succeeded: " + restResponse.getData().asJSONObject());
+                        Log.i("MyAmplifyApp", "POST succeed: " + restResponse.getData().asJSONObject());
                         check(restResponse.getData(), restResponse.getCode());
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -638,6 +628,8 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                     Log.e("MyAmplifyApp", "POST failed.", apiFailure);
                 }
         );
+        saveButton.setVisibility(View.GONE);
+        retakeButton.setVisibility(View.GONE);
     }
 
     void check(RestResponse.Data data, RestResponse.Code code) throws JSONException {
@@ -655,43 +647,76 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
             }
             else{
                 Log.i("MyAmplifyApp", "POST succeeded: " + jsonObject);
+                //Log.i("MyAmplifyApp", (String) jsonObject.get("Shoulder"));
 
-                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-                DatabaseReference mDb = mDatabase.getReference();
+                SharedPreferences sharedPreferences = getSharedPreferences("User_Measurements",MODE_PRIVATE);
+
+                // Creating an Editor object to edit(write to the file)
+                SharedPreferences.Editor myEdit = sharedPreferences.edit();
+
+                // Storing the key and its value as the data fetched from edittext
+                Float Shoulder = Float.valueOf(jsonObject.getString("Shoulder"));
+                Float Right_hand = Float.valueOf(jsonObject.getString("Right_hand"));
+
+                Float Left_hand = Float.valueOf(jsonObject.getString("Left_hand"));
+                Float Right_leg = Float.valueOf(jsonObject.getString("Right_leg"));
+                Float Left_leg = Float.valueOf(jsonObject.getString("Left_leg"));
+                Float Hip = Float.valueOf(jsonObject.getString("Hip"));
+                Float Waist = Float.valueOf(jsonObject.getString("Waist"));
+                Float Chest_girth = Float.valueOf(jsonObject.getString("Chest Girth"));
+                Float Thigh_girth = Float.valueOf(jsonObject.getString("Thigh Girth"));
+                Float Ankle_regular = Float.valueOf(jsonObject.getString("Ankle Regular"));
+                Float Ankle_tight = Float.valueOf(jsonObject.getString("Ankle Tight"));
+
+
+                myEdit.putFloat("shoulder",  Shoulder);
+                myEdit.putFloat("right_hand", Right_hand );
+                myEdit.putFloat("left_hand", Left_hand);
+                myEdit.putFloat("right_leg", Right_leg);
+                myEdit.putFloat("left_leg", Left_leg);
+                myEdit.putFloat("hip", Hip);
+                myEdit.putFloat("waist", Waist);
+                myEdit.putFloat("chest_girth", Chest_girth);
+                myEdit.putFloat("thigh_girth", Thigh_girth);
+                myEdit.putFloat("ankle_regular", Ankle_regular);
+                myEdit.putFloat("ankle_tight", Ankle_tight);
+
+                myEdit.commit();
+
+                // Update DB
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 String userKey = user.getUid();
 
-                mDb.child("Users").child(userKey).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        try {
-                            dataSnapshot.getRef().child("shoulder").setValue(jsonObject.get("Shoulder"));
-                            dataSnapshot.getRef().child("right_hand").setValue(jsonObject.get("Right_hand"));
-                            dataSnapshot.getRef().child("left_hand").setValue(jsonObject.get("Left_hand"));
-                            dataSnapshot.getRef().child("right_leg").setValue(jsonObject.get("Right_leg"));
-                            dataSnapshot.getRef().child("left_leg").setValue(jsonObject.get("Left_leg"));
-                            dataSnapshot.getRef().child("hip").setValue(jsonObject.get("Hip"));
-                            dataSnapshot.getRef().child("waist").setValue(jsonObject.get("Waist"));
-                            dataSnapshot.getRef().child("chest_girth").setValue(jsonObject.get("Chest Girth"));
-                            dataSnapshot.getRef().child("thigh_girth").setValue( jsonObject.get("Thigh Girth"));
-                            dataSnapshot.getRef().child("ankle_regular").setValue(jsonObject.get("Ankle Regular"));
-                            dataSnapshot.getRef().child("ankle_tight").setValue( jsonObject.get("Ankle Tight"));
-                            String measure = "measure";
-                            Intent intent = new Intent(Camera.this,MainScreen.class);
-                            intent.putExtra("measure",measure);
-                          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
+                HashMap<String,String> measurements = new HashMap<String, String>();
+                measurements.put("shoulder", String.valueOf(Shoulder));
+                measurements.put("right_hand", String.valueOf(Right_hand));
+                measurements.put("left_hand", String.valueOf(Left_hand));
+                measurements.put("right_leg", String.valueOf(Right_leg));
+                measurements.put("left_leg", String.valueOf(Left_leg));
+                measurements.put("hip", String.valueOf(Hip));
+                measurements.put("waist", String.valueOf(Waist));
+                measurements.put("chest_girth", String.valueOf(Chest_girth));
+                measurements.put("thigh_girth", String.valueOf(Thigh_girth));
+                measurements.put("ankle_regular", String.valueOf(Ankle_regular));
+                measurements.put("ankle_tight", String.valueOf(Ankle_tight));
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                databaseReference.child(userKey).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        snapshot.getRef().child("measurements").setValue(measurements);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
                     }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {}
                 });
-
+                //Calling the measurements activity
+                String measure = "measure";
+                Intent intent = new Intent(Camera.this,MainScreen.class);
+                intent.putExtra("measure",measure);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
             finish();
 

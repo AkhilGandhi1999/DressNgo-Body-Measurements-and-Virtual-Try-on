@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:text="Male"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="21sp" />
+            android:textSize="20sp" />
 
         <RadioButton
             android:id="@+id/radFemale"
@@ -94,14 +94,14 @@
             android:layout_marginLeft="82dp"
             android:text="Female"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="21sp" />
+            android:textSize="20sp" />
     </RadioGroup>
 
 
     <Button
         android:id="@+id/btnCreateUser"
-        android:layout_width="160dp"
-        android:layout_height="52dp"
+        android:layout_width="175dp"
+        android:layout_height="55dp"
         android:layout_marginTop="38dp"
         android:text="Create Profile"
         android:textColor="#FFFFFF"

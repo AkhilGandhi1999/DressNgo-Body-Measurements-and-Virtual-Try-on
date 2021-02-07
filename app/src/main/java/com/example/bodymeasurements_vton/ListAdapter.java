@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ListAdapter extends RecyclerView.Adapter {
 
-    private Double[] data;
-    public ListAdapter(Double[] data){
+    private Float[] data;
+    public ListAdapter(Float[] data){
         this.data = data.clone();
     }
 

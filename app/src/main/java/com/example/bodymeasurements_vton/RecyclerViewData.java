@@ -15,9 +15,9 @@ public class RecyclerViewData {
       "Ankle Fit"
     };
 
- public static  Double[] measurements = new Double[11];
+ public static  Float[] measurements = new Float[11];
 
-    public RecyclerViewData(Double[] measurements){
+    public RecyclerViewData(Float[] measurements){
         this.measurements = measurements.clone();
     }
 

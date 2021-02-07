@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -67,6 +68,33 @@ public class CreateProfile extends AppCompatActivity {
                     datas.getRef().child("gender").setValue(gender);
                     datas.getRef().child("height").setValue(height);
                     datas.getRef().child("weight").setValue(weight);
+
+                    // Storing data into SharedPreferences
+                    SharedPreferences sharedPreferences = getSharedPreferences("User_Measurements",MODE_PRIVATE);
+
+                    // Creating an Editor object to edit(write to the file)
+                    SharedPreferences.Editor myEdit = sharedPreferences.edit();
+
+                    // Storing the key and its value as the data fetched from edittext
+                    myEdit.putInt("height", height);
+                    myEdit.putFloat("shoulder",0);
+                    myEdit.putFloat("right_hand",0);
+                    myEdit.putFloat("left_hand",0);
+                    myEdit.putFloat("right_leg",0);
+                    myEdit.putFloat("left_leg",0);
+                    myEdit.putFloat("hip",0);
+                    myEdit.putFloat("waist",0);
+                    myEdit.putFloat("chest_girth",0);
+                    myEdit.putFloat("thigh_girth",0);
+                    myEdit.putFloat("ankle_regular",0);
+                    myEdit.putFloat("ankle_tight",0);
+
+
+                    // Once the changes have been made,
+                    // we need to commit to apply those changes made,
+                    // otherwise, it will throw an error
+                    myEdit.commit();
+
                     Intent intent = new Intent(CreateProfile.this, MainScreen.class);
                     startActivity(intent);
                     finish();

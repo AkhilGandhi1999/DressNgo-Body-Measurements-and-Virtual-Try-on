@@ -22,6 +22,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONException;
+
 public class Register extends AppCompatActivity {
 
     private Button btn1;
@@ -71,9 +73,14 @@ public class Register extends AppCompatActivity {
             this.mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 public void onComplete(Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                            User user = new User(email, 0);
+                        User user = null;
+                        try {
+                            user = new User(email, 0);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-                            FirebaseDatabase.getInstance().getReference("Users")
+                        FirebaseDatabase.getInstance().getReference("Users")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

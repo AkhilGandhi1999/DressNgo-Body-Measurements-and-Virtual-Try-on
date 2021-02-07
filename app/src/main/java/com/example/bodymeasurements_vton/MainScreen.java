@@ -101,17 +101,10 @@ public class MainScreen extends AppCompatActivity {
         LayoutInflater inflater = null;
         ViewGroup container = null;
         SharedPreferences pref = getApplicationContext().getSharedPreferences("myP",MODE_PRIVATE);
-        //myActivity.setContentView(R.layout.fragment_home);
         setContentView(R.layout.activity_main_screen);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
         Bundle extras = getIntent().getExtras();
-
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference mDb = mDatabase.getReference();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        String userKey = user.getUid();
 
         if(extras != null){
 
