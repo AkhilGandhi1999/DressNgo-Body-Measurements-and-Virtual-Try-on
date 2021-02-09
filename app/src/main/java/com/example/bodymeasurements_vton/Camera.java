@@ -166,7 +166,13 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                    int orientation = 0;
+                    try {
+                        orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+                    }catch (NullPointerException n){
+                        orientation = 0;
+                    }
                     Bitmap bmp=null;
                     switch (orientation) {
                         case ExifInterface.ORIENTATION_ROTATE_90:
@@ -177,6 +183,9 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                             break;
                         case ExifInterface.ORIENTATION_ROTATE_270:
                             bmp=rotateImage(img, 270);
+                            break;
+                        case ExifInterface.ORIENTATION_NORMAL:
+                            bmp = img;
                             break;
                     }
                     pre.setImageBitmap(bmp);
@@ -277,7 +286,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                 {
 
                     Log.e("Accelerometer", String.valueOf(inclination_x));
-                    if (inclination>=85 && inclination<=95 && inclination_x>=85 && inclination_x<=95) {
+                    if (inclination>=77 && inclination<=95 && inclination_x>=77 && inclination_x<=95) {
                         rw.setVisibility(View.INVISIBLE);
                         r.setVisibility(View.VISIBLE);
                         takePictureButton.setEnabled(true);
@@ -291,7 +300,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                 }
                 else {
                     Log.e("Accelerometer", String.valueOf(inclination_x));
-                    if (inclination>=85 && inclination<=95 && inclination_x>=85 && inclination_x<=95) {
+                    if (inclination>=77 && inclination<=95 && inclination_x>=77 && inclination_x<=95) {
                         fw.setVisibility(View.INVISIBLE);
                         f.setVisibility(View.VISIBLE);
                         takePictureButton.setEnabled(true);
