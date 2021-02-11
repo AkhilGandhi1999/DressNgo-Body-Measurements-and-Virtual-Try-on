@@ -49,6 +49,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.amazonaws.ClientConfiguration;
 import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.api.rest.RestResponse;
 import com.amplifyframework.core.Amplify;
@@ -146,6 +147,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
         textureView=findViewById(R.id.texture);
         MediaActionSound sound = new MediaActionSound();
         l=findViewById(R.id.take);
+        //CAPTURE BUTTON
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,6 +189,9 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                         case ExifInterface.ORIENTATION_NORMAL:
                             bmp = img;
                             break;
+                        default:
+                            bmp=img;
+                            break;
                     }
                     pre.setImageBitmap(bmp);
                     pre.setVisibility(View.VISIBLE);
@@ -196,6 +201,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
 
             }
         });
+        //RETAKE BUTTON
         retakeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -217,6 +223,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                 }
             }
         });
+        //SAVE BUTTON
         saveButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -243,6 +250,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
             }
         });
     }
+    //FUNCTION FOR ROTATING THE IMAGE BITMAP
     public static Bitmap rotateImage(Bitmap im, int degree) {
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
@@ -250,6 +258,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
         im.recycle();
         return rotatedImg;
     }
+    //USED TO CHECK WHETHER THE GYROSCOPE SENSOR IS ENABLED OR NOT
     public boolean checkSensorAvailability(int sensorType) {
         boolean isSensor = false;
         if (sensorManager.getDefaultSensor(sensorType) != null) {
@@ -257,6 +266,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
         }
         return isSensor;
     }
+    //WORKS ON REAL-TIME BASIS AND IS TRIGGERED ACCORDINGLY
     @Override
     public void onSensorChanged(SensorEvent event) {
         if(flag==1)
@@ -388,6 +398,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
             e.printStackTrace();
         }
     }
+    //TRIGGERED A SOON AS THE CAPTURE BUTTON IS CLICKED
     protected void takePicture() {
         if(null == cameraDevice) {
             Log.e(TAG, "cameraDevice is null");
@@ -448,6 +459,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                         }
                     }
                 }
+                //CALLED IN ORDER TO SAVE THE CLICKED IMAGE ON THE END-USER'S DEVICE
                 private void save(byte[] bytes) throws IOException {
                     OutputStream output = null;
                     try {
@@ -486,6 +498,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
             e.printStackTrace();
         }
     }
+    //CALLED AUTOMATICALLY AND GENERATED THE CAMERA PREVIEW SCREEN FOR CLICKING AN IMAGE
     protected void createCameraPreview() {
         try {
             SurfaceTexture texture = textureView.getSurfaceTexture();
@@ -514,6 +527,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
             e.printStackTrace();
         }
     }
+    //TRIGGERED WHEN THE PERMISSIONS ARE MET AND THE HARDWARE IS AVAILABLE
     private void openCamera() {
         CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         Log.e(TAG, "is camera open");
@@ -545,6 +559,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
             e.printStackTrace();
         }
     }
+    //CALLED IN ORDER TO CLOSE THE CAMERA
     private void closeCamera() {
         if (null != cameraDevice) {
             cameraDevice.close();
@@ -587,6 +602,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
         sensorManager.unregisterListener(this);
     }
 
+    //FINAL FUNCTION SO AS TO PASS THE IMAGES TO THE AWS SERVER
     @RequiresApi(api = Build.VERSION_CODES.O)
     void server_call(File file1, File file2) {
 
@@ -623,6 +639,10 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                 .addPath("/fashionm")
                 .addBody(result.getBytes())
                 .build();
+        ClientConfiguration clientConfig = new ClientConfiguration();
+
+        clientConfig.setSocketTimeout(20000);
+        clientConfig.setConnectionTimeout(5000);
 
         Amplify.API.post(options,
                 restResponse -> {
@@ -635,6 +655,11 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                 },
                 apiFailure -> {
                     Log.e("MyAmplifyApp", "POST failed.", apiFailure);
+                    Intent intent = new Intent(Camera.this,Walkthrough.class);
+                    String again = "Error in the images uploaded start again, server error";
+                   // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("again",again);
+                    startActivity(intent);
                 }
         );
         saveButton.setVisibility(View.GONE);
@@ -738,7 +763,4 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
 //        }
 
     }
-
-    // Compute the three orientation angles based on the most recent readings from
-    // the device's accelerometer and magnetometer.
 }

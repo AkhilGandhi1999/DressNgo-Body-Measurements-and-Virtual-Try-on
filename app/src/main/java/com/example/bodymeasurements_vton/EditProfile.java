@@ -8,6 +8,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 //import android.os.Bundle;
 //import android.view.LayoutInflater;
 //import android.view.View;
@@ -36,6 +44,34 @@ public class EditProfile extends AppCompatActivity {
         setContentView(R.layout.fragment_edit);
         init();
 
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference mDb = mDatabase.getReference();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        String userKey = user.getUid();
+
+
+        mDb.child("Users").child(userKey).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String gender = dataSnapshot.child("gender").getValue().toString();
+                String email = dataSnapshot.child("email").getValue().toString();
+                String height = dataSnapshot.child("height").getValue().toString();
+                String weight = dataSnapshot.child("weight").getValue().toString();
+                String name = dataSnapshot.child("name").getValue().toString();
+                height.concat("cm");
+                weight.concat("kg");
+                ed1.setText(name);
+                ed2.setText(email);
+                ed3.setText(height);
+                ed4.setText(weight);
+                ed5.setText(gender);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+
         tx1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,13 +79,9 @@ public class EditProfile extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        ed1.setText("USER 1");
-        ed2.setText("USER 1");
-        ed3.setText("169");
-        ed4.setText("63");
-        ed5.setText("Male");
 
     }
+
     void init(){
         tx1 = (TextView) findViewById(R.id.changePassword);
         ed1 = (EditText) findViewById(R.id.changeName);

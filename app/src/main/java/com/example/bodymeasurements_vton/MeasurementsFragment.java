@@ -25,7 +25,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.os.ParcelFileDescriptor.MODE_APPEND;
 
 public class MeasurementsFragment extends Fragment {
 
@@ -89,8 +88,7 @@ public class MeasurementsFragment extends Fragment {
 
                 myEdit.commit();
 
-                //Update SharedPreferences
-
+                //Update SharedPreference
                 SharedPreferences sh = getActivity().getSharedPreferences("User_Measurements", MODE_PRIVATE);
 
                 // The value will be default as empty string because for
