@@ -13,6 +13,7 @@ public class User {
    // public JSONObject measurements = new JSONObject();
    // public float shoulder,right_hand, left_hand, right_leg, left_leg, hip, waist, chest_girth, thigh_girth, ankle_regular, ankle_tight;
 
+
     public User(){
 
     }
