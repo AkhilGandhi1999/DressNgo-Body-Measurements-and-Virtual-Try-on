@@ -36,7 +36,6 @@ import com.google.firebase.database.ValueEventListener;
 // CHANGING FRAGMENTS TO ACTIVITY
 public class EditProfile extends AppCompatActivity {
 
-    private TextView tx1;
     private EditText ed1, ed2, ed3, ed4, ed5;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,18 +71,10 @@ public class EditProfile extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {}
         });
 
-        tx1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(EditProfile.this, ChangePassword.class);
-                startActivity(intent);
-            }
-        });
 
     }
 
     void init(){
-        tx1 = (TextView) findViewById(R.id.changePassword);
         ed1 = (EditText) findViewById(R.id.changeName);
         ed2 = (EditText) findViewById(R.id.changeEmail);
         ed3 = (EditText) findViewById(R.id.changeHeight);

@@ -72,14 +72,6 @@
         app:layout_constraintHorizontal_bias="0.497"
         android:gravity="center" />
 
-    <TextView
-        android:id="@+id/changePassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Change Password"
-        android:textSize="20sp"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@color/colorPrimaryDark" />
+
 
 </LinearLayout>

@@ -71,9 +71,13 @@ public class CreateProfile extends AppCompatActivity {
 
                     // Storing data into SharedPreferences
                     SharedPreferences sharedPreferences = getSharedPreferences("User_Measurements",MODE_PRIVATE);
+                   // SharedPreferences gender_user = getSharedPreferences("Gender",MODE_PRIVATE);
 
                     // Creating an Editor object to edit(write to the file)
                     SharedPreferences.Editor myEdit = sharedPreferences.edit();
+                    //SharedPreferences.Editor putGender = gender_user.edit();
+
+                    //putGender.putString("Gender",gender);
 
                     // Storing the key and its value as the data fetched from edittext
                     myEdit.putInt("height", height);
@@ -88,12 +92,14 @@ public class CreateProfile extends AppCompatActivity {
                     myEdit.putFloat("thigh_girth",0);
                     myEdit.putFloat("ankle_regular",0);
                     myEdit.putFloat("ankle_tight",0);
+                    myEdit.putString("Gender",gender);
 
 
                     // Once the changes have been made,
                     // we need to commit to apply those changes made,
                     // otherwise, it will throw an error
                     myEdit.commit();
+                   // putGender.commit();
 
                     Intent intent = new Intent(CreateProfile.this, MainScreen.class);
                     startActivity(intent);

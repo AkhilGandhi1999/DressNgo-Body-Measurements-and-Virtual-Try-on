@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "1086003640977",
-    "project_id": "fashion-ai-database",
-    "storage_bucket": "fashion-ai-database.appspot.com"
+    "project_number": "203360410858",
+    "firebase_url": "https://fashion-ai-database-d21e3-default-rtdb.firebaseio.com",
+    "project_id": "fashion-ai-database-d21e3",
+    "storage_bucket": "fashion-ai-database-d21e3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1086003640977:android:97aaedd3ae27f1d874dd30",
+        "mobilesdk_app_id": "1:203360410858:android:945c9b8fab8035772b8b93",
         "android_client_info": {
           "package_name": "com.example.bodymeasurements_vton"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1086003640977-hocriurfu0fpir6n5tc6h670c7boad6s.apps.googleusercontent.com",
+          "client_id": "203360410858-fofv8onu6hvqa5e4gq7aotq2797sggv4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDF59P8Pq9_myFtt5MrPdZcxWWvKJPtatA"
+          "current_key": "AIzaSyBjszNScxkSAcIdZik9T77prGVM5lf3iL0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1086003640977-hocriurfu0fpir6n5tc6h670c7boad6s.apps.googleusercontent.com",
+              "client_id": "203360410858-fofv8onu6hvqa5e4gq7aotq2797sggv4.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

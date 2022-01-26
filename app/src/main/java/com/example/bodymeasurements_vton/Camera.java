@@ -38,6 +38,7 @@ import android.media.ImageReader;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.StrictMode;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -47,6 +48,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amazonaws.ClientConfiguration;
@@ -71,6 +73,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,7 +81,17 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Camera extends AppCompatActivity implements SensorEventListener{
     private static final String TAG = "AndroidCameraApi";
@@ -160,7 +173,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                     fw.setVisibility(View.INVISIBLE);
                     f.setVisibility(View.INVISIBLE);
                     fname=new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString(), filename+ ".jpeg").getAbsolutePath();
-                  //  Toast.makeText(Camera.this,fname,Toast.LENGTH_LONG).show();
+                  // Toast.makeText(Camera.this,fname,Toast.LENGTH_LONG).show();
                     Bitmap img = BitmapFactory.decodeFile(fname);
                     ExifInterface ei = null;
                     try {
@@ -296,7 +309,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                 {
 
                     Log.e("Accelerometer", String.valueOf(inclination_x));
-                    if (inclination>=77 && inclination<=95 && inclination_x>=77 && inclination_x<=95) {
+                    if (inclination>=77 && inclination<=103 && inclination_x>=77 && inclination_x<=103) {
                         rw.setVisibility(View.INVISIBLE);
                         r.setVisibility(View.VISIBLE);
                         takePictureButton.setEnabled(true);
@@ -310,7 +323,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                 }
                 else {
                     Log.e("Accelerometer", String.valueOf(inclination_x));
-                    if (inclination>=77 && inclination<=95 && inclination_x>=77 && inclination_x<=95) {
+                    if (inclination>=77 && inclination<=103 && inclination_x>=77 && inclination_x<=103) {
                         fw.setVisibility(View.INVISIBLE);
                         f.setVisibility(View.VISIBLE);
                         takePictureButton.setEnabled(true);
@@ -606,16 +619,45 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
     @RequiresApi(api = Build.VERSION_CODES.O)
     void server_call(File file1, File file2) {
 
-
+        String postUrl2 = "http://52.66.252.69/fashionm";
         p.setVisibility(View.VISIBLE);
         String b64_1 = "",b64_2 = "";
         try{
+
+
+
             FileInputStream fileInputStreamReader1 = new FileInputStream(file1);
             FileInputStream fileInputStreamReader2 = new FileInputStream(file2);
 
 
             byte[] bytes1 = new byte[(int)file1.length()];
             byte[] bytes2 = new byte[(int)file2.length()];
+
+            byte[] bt = Files.readAllBytes(file1.toPath());
+            byte[] bt1 = Files.readAllBytes(file2.toPath());
+
+            String postUrl = "http://52.66.252.69/upload";
+            String postUrl1 = "http://52.66.252.69/uploads";
+
+
+
+
+
+            MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+            multipartBodyBuilder.addFormDataPart("image" + 0, "image_front.jpg", RequestBody.create(MediaType.parse("image/*jpg"), bt));
+            RequestBody postBodyImage = multipartBodyBuilder.build();
+            postRequest(postUrl, postBodyImage);
+
+            // for second image
+
+            MultipartBody.Builder multipartBodyBuilder1 = new MultipartBody.Builder().setType(MultipartBody.FORM);
+            multipartBodyBuilder1.addFormDataPart("image" + 0, "image_right.jpg", RequestBody.create(MediaType.parse("image/*jpg"), bt));
+            RequestBody postBodyImage1 = multipartBodyBuilder1.build();
+            postRequest1(postUrl1, postBodyImage1);
+
+
+
+
 
             fileInputStreamReader1.read(bytes1);
             fileInputStreamReader2.read(bytes2);
@@ -633,35 +675,41 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
 
         SharedPreferences sh = getSharedPreferences("User_Measurements", MODE_PRIVATE);
         String height = String.valueOf(sh.getInt("height",0));
-        String jsonRequestString = "{\"height\" : \"%s\"  , \"front_image\" : \"%s\", \"right_image\" : \"%s\"}";
-        String result = String.format(jsonRequestString, height, b64_1, b64_2);
-        RestOptions options = RestOptions.builder()
-                .addPath("/fashionm")
-                .addBody(result.getBytes())
-                .build();
-        ClientConfiguration clientConfig = new ClientConfiguration();
+        Toast.makeText(Camera.this,"Height of the person is : " + height,Toast.LENGTH_LONG).show();
 
-        clientConfig.setSocketTimeout(20000);
-        clientConfig.setConnectionTimeout(5000);
+        // final call for getting values from the server
+        MediaType mediaType = MediaType.parse("text/plain; charset=utf-8");
+        RequestBody postBody = RequestBody.create(mediaType, height);
+        postRequest2(postUrl2, postBody);
 
-        Amplify.API.post(options,
-                restResponse -> {
-                    try {
-                        Log.i("MyAmplifyApp", "POST succeed: " + restResponse.getData().asJSONObject());
-                        check(restResponse.getData(), restResponse.getCode());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                },
-                apiFailure -> {
-                    Log.e("MyAmplifyApp", "POST failed.", apiFailure);
-                    Intent intent = new Intent(Camera.this,Walkthrough.class);
-                    String again = "Error in the images uploaded start again, server error";
-                   // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("again",again);
-                    startActivity(intent);
-                }
-        );
+
+
+//        String jsonRequestString = "{\"height\" : \"%s\"  , \"front_image\" : \"%s\", \"right_image\" : \"%s\"}";
+//        String result = String.format(jsonRequestString, height, b64_1, b64_2);
+//        RestOptions options = RestOptions.builder()
+//                .addPath("/fashionm")
+//                .addBody(result.getBytes())
+//                .build();
+//
+//
+//        Amplify.API.post(options,
+//                restResponse -> {
+//                    try {
+//                        Log.i("MyAmplifyApp", "POST succeed: " + restResponse.getData().asJSONObject());
+//                       // check(restResponse.getData(), restResponse.getCode());
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                },
+//                apiFailure -> {
+//                    Log.e("MyAmplifyApp", "POST failed.", apiFailure);
+//                    Intent intent = new Intent(Camera.this,Walkthrough.class);
+//                    String again = "Error in the images uploaded start again, server error";
+//                   // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    intent.putExtra("again",again);
+//                    startActivity(intent);
+//                }
+//        );
         saveButton.setVisibility(View.GONE);
         retakeButton.setVisibility(View.GONE);
     }
@@ -753,7 +801,6 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
                 startActivity(intent);
             }
             finish();
-
         }
 //        else if(code.isServiceFailure()){
 //
@@ -763,4 +810,240 @@ public class Camera extends AppCompatActivity implements SensorEventListener{
 //        }
 
     }
+
+    void postRequest(String postUrl, RequestBody postBody) {
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(postUrl)
+                .post(postBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Cancel the post on failure.
+                call.cancel();
+                Log.d("FAIL", e.getMessage());
+
+                // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TextView responseText = findViewById(R.id.responseText);
+                        //responseText.setText("Failed to Connect to Server. Please Try Again.");
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TextView responseText = findViewById(R.id.responseText);
+                        // responseText.setText("Server's Response\n" + response.body().string());
+                        try {
+                            Toast.makeText(Camera.this,response.body().string(),Toast.LENGTH_LONG).show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    void postRequest1(String postUrl, RequestBody postBody) {
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(postUrl)
+                .post(postBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Cancel the post on failure.
+                call.cancel();
+                Log.d("FAIL", e.getMessage());
+
+                // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TextView responseText = findViewById(R.id.responseText);
+                        //responseText.setText("Failed to Connect to Server. Please Try Again.");
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TextView responseText = findViewById(R.id.responseText);
+                        // responseText.setText("Server's Response\n" + response.body().string());
+                        try {
+                            Toast.makeText(Camera.this,response.body().string(),Toast.LENGTH_LONG).show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    void postRequest2(String postUrl, RequestBody postBody) {
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(30000, TimeUnit.MILLISECONDS)
+                .readTimeout(30000,TimeUnit.MILLISECONDS)
+                .writeTimeout(30000,TimeUnit.MILLISECONDS)
+                .build();
+
+
+        Request request = new Request.Builder()
+                .url(postUrl)
+                .post(postBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Cancel the post on failure.
+                call.cancel();
+
+                // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(Camera.this,"Failed to Connect to Server",Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int SDK_INT = android.os.Build.VERSION.SDK_INT;
+                        if (SDK_INT > 8)
+                        {
+                            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                                    .permitAll().build();
+                            StrictMode.setThreadPolicy(policy);
+                            //your codes here
+                            String jsonData = null;
+                            try {
+                                jsonData = response.body().string();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+
+
+                                JSONObject jsonObject = new JSONObject(jsonData);
+
+                                if(jsonObject.has("Error")){
+                                    Toast.makeText(Camera.this,"Error in the images uploaded",Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                                else {
+
+                                    Toast.makeText(Camera.this, jsonObject.toString(), Toast.LENGTH_LONG);
+                                    SharedPreferences sharedPreferences = getSharedPreferences("User_Measurements", MODE_PRIVATE);
+
+                                    // Creating an Editor object to edit(write to the file)
+                                    SharedPreferences.Editor myEdit = sharedPreferences.edit();
+
+                                    // Storing the key and its value as the data fetched from edittext
+                                    Float Shoulder = Float.valueOf(jsonObject.getString("Shoulder"));
+                                    Float Right_hand = Float.valueOf(jsonObject.getString("Right_hand"));
+
+                                    Float Left_hand = Float.valueOf(jsonObject.getString("Left_hand"));
+                                    Float Right_leg = Float.valueOf(jsonObject.getString("Right_leg"));
+                                    Float Left_leg = Float.valueOf(jsonObject.getString("Left_leg"));
+                                    Float Hip = Float.valueOf(jsonObject.getString("Hip"));
+                                    Float Waist = Float.valueOf(jsonObject.getString("Waist"));
+                                    Float Chest_girth = Float.valueOf(jsonObject.getString("Chest Girth"));
+                                    Float Thigh_girth = Float.valueOf(jsonObject.getString("Thigh Girth"));
+                                    Float Ankle_regular = Float.valueOf(jsonObject.getString("Ankle Regular"));
+                                    Float Ankle_tight = Float.valueOf(jsonObject.getString("Ankle Tight"));
+
+
+                                    myEdit.putFloat("shoulder", Shoulder);
+                                    myEdit.putFloat("right_hand", Right_hand);
+                                    myEdit.putFloat("left_hand", Left_hand);
+                                    myEdit.putFloat("right_leg", Right_leg);
+                                    myEdit.putFloat("left_leg", Left_leg);
+                                    myEdit.putFloat("hip", Hip);
+                                    myEdit.putFloat("waist", Waist);
+                                    myEdit.putFloat("chest_girth", Chest_girth);
+                                    myEdit.putFloat("thigh_girth", Thigh_girth);
+                                    myEdit.putFloat("ankle_regular", Ankle_regular);
+                                    myEdit.putFloat("ankle_tight", Ankle_tight);
+
+                                    myEdit.commit();
+
+                                    // Update DB
+                                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                                    String userKey = user.getUid();
+
+                                    HashMap<String, String> measurements = new HashMap<String, String>();
+                                    measurements.put("shoulder", String.valueOf(Shoulder));
+                                    measurements.put("right_hand", String.valueOf(Right_hand));
+                                    measurements.put("left_hand", String.valueOf(Left_hand));
+                                    measurements.put("right_leg", String.valueOf(Right_leg));
+                                    measurements.put("left_leg", String.valueOf(Left_leg));
+                                    measurements.put("hip", String.valueOf(Hip));
+                                    measurements.put("waist", String.valueOf(Waist));
+                                    measurements.put("chest_girth", String.valueOf(Chest_girth));
+                                    measurements.put("thigh_girth", String.valueOf(Thigh_girth));
+                                    measurements.put("ankle_regular", String.valueOf(Ankle_regular));
+                                    measurements.put("ankle_tight", String.valueOf(Ankle_tight));
+
+                                    databaseReference.child(userKey).addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            snapshot.getRef().child("measurements").setValue(measurements);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+
+                                    Thread.sleep(2000);
+                                    //Calling the measurements activity
+                                    String measure = "measure";
+                                    Intent intent = new Intent(Camera.this, MainScreen.class);
+                                    intent.putExtra("measure", measure);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+
+                                }
+                            } catch (JSONException | InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            // responseText.setText(response.body().string());
+                        }
+
+                    }
+                });
+            }
+        });
+    }
+
 }

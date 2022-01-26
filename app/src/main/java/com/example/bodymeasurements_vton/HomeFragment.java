@@ -63,7 +63,7 @@ import com.happyfresh.showcase.config.AlignType;
 import com.happyfresh.showcase.listener.GuideListener;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
-    private Button btn1;
+    private Button btn1, btn2;
     public  View v;
     public int flag=0;
     @Nullable
@@ -72,8 +72,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         v =  inflater.inflate(R.layout.fragment_home,container,false);
         flag=0;
         btn1 = (Button) v.findViewById(R.id.btnBody);
+        btn2 = (Button) v.findViewById(R.id.vton);
 
         btn1.setOnClickListener(this);
+        btn2.setOnClickListener(this);
         return v;
     }
     public void changeprocess(){
@@ -116,6 +118,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             case R.id.btnBody:
                 Intent walk_intent = new Intent(getActivity(), Walkthrough.class);
                 startActivity(walk_intent);
+                break;
+            case  R.id.vton:
+                Intent vton_intent = new Intent(getActivity(), SelectCloth.class);
+                startActivity(vton_intent);
                 break;
 
         }

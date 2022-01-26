@@ -1,50 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Walkthrough">
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="50dp"
         android:text="Take a walkthrough"
         android:textSize="21sp"
+        android:layout_gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
 
-    <FrameLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/frl"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/btnSkip"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
-        <VideoView
+        >
+        <!--<VideoView
             android:id="@+id/videoview"
-            android:layout_width="380dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="450dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="45dp"
+            android:layout_gravity="center_horizontal"
             app:layout_constraintDimensionRatio="16:9"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-             />
-    </FrameLayout>
+             />-->
+        <com.google.android.youtube.player.YouTubePlayerView
+            android:id="@+id/ytPlayer"
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="45dp"
+            />
+    </LinearLayout>
     <Button
         android:id="@+id/btnSkip"
         android:layout_width="149dp"
         android:layout_height="52dp"
-        android:layout_marginBottom="112dp"
+        android:layout_marginTop="50dp"
         android:backgroundTint="@color/colorPrimaryDark"
+        android:layout_gravity="center_horizontal"
         android:text="Skip"
         android:textColor="#fff"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

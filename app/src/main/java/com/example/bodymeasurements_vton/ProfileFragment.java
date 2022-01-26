@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,9 +36,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        TextView txt1 = (TextView) rootView.findViewById(R.id.textContactUs);
+        Button txt1 = (Button) rootView.findViewById(R.id.textContactUs);
 
-        TextView txt2 = (TextView) rootView.findViewById(R.id.textEditProfile);
 
         txt3 = (TextView) rootView.findViewById(R.id.textLogout);
 
@@ -71,7 +71,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
 
         txt1.setOnClickListener(this);
-        txt2.setOnClickListener(this);
         txt3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,11 +94,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 startActivity(contact_intent);
                 break;
 
-            case R.id.textEditProfile:
-                Toast.makeText(getActivity(),"Work in progress",Toast.LENGTH_LONG).show();
-                Intent profile_intent = new Intent(getActivity(),EditProfile.class);
-                startActivity(profile_intent);
-                break;
+//            case R.id.textEditProfile:
+//                Intent profile_intent = new Intent(getActivity(),EditProfile.class);
+//                startActivity(profile_intent);
+//                break;
         }
     }
 

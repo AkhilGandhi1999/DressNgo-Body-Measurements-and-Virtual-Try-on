@@ -1,6 +1,11 @@
 <resources>
-    <string name="app_name">BodyMeasurements_VTON</string>
+    <string name="app_name">DressNgo</string>
     <string name="toast_message">Done</string>
     <string name="take_picture">Click!!</string>
     <string name="click_me">CLICK ME</string>
+    <string name="bulleted_list">
+        <li>Make sure your upper body and hands are clearly visible.</li>\n
+        <li>Keep the pose and background simple.</li>\n
+        <li>To retake/re-upload click the "Upload Image" button</li>
+    </string>
 </resources>
